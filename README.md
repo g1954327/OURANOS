@@ -1,0 +1,2 @@
+# OURANOS
+URLを短くすることができるCLIです
