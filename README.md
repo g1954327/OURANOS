@@ -9,6 +9,7 @@ URLとはインターネット上の所在を表記するものであり、イ�
     ouranos [command] <URL>
     command
         -v , --version       このアプリケーションのバージョンを説明する。 
-        -u , --URL           
         -h , --help          このメッセージを表示する。
         -l , --long          元々のURLも出力する
+        -c , --copy          出力した短縮URLをコピーする。
+        
