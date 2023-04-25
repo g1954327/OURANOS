@@ -1,3 +1,4 @@
+COVERALLS_REPO_TOKEN=Oh8bHbkadgt3mXKMbLTiNCBDQ8pNbOE1b
 [![Go Report Card](https://goreportcard.com/badge/github.com/g1954327/ouranos)](https://goreportcard.com/report/github.com/g1954327/ouranos)
 [![codebeat badge](https://codebeat.co/badges/9f634397-7dff-4ce7-ba2e-d16ed5bce4c2)](https://codebeat.co/projects/github-com-g1954327-ouranos-main)
 
