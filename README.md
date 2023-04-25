@@ -1,3 +1,5 @@
+https://goreportcard.com/badge/github.com/g1954327/ouranos
+
 # ouranos
 URLを渡すと短縮されたURLを出力してくれるCLIです。
 ## 説明
