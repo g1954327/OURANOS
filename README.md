@@ -1,7 +1,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/g1954327/ouranos/badge.svg?branch=main)](https://coveralls.io/github/g1954327/ouranos?branch=main)
 [![codebeat badge](https://codebeat.co/badges/9f634397-7dff-4ce7-ba2e-d16ed5bce4c2)](https://codebeat.co/projects/github-com-g1954327-ouranos-main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/g1954327/ouranos)](https://goreportcard.com/report/github.com/g1954327/ouranos)
-[![.github/workflows/build.yaml](https://github.com/g1954327/ouranos/actions/workflows/build.yaml)
+[![.github/workflows/build.yaml](https://github.com/g1954327/ouranos/actions/workflows/build.yaml/badge.svg)](https://github.com/g1954327/ouranos/actions/workflows/build.yaml)
 
 
 # ouranos
