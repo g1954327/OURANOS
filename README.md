@@ -12,7 +12,7 @@ URLとはインターネット上の所在を表記するものであり、イ�
 
 ## 使用方法
     $ ouranos -h  
-    ouranos version : 0.00  最終更新 4/18
+    ouranos version : 0.00  最終更新 4/25
     ouranos [command] <URL>
     command
         -v , --version       このアプリケーションのバージョンを説明する。 
