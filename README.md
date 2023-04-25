@@ -1,4 +1,5 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/g1954327/ouranos)](https://goreportcard.com/report/github.com/g1954327/ouranos)
+https://codebeat.co/projects/github-com-g1954327-ouranos-main
 
 # ouranos
 URLを渡すと短縮されたURLを出力してくれるCLIです。
