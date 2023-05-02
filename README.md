@@ -30,7 +30,7 @@ URLとはインターネット上の所在を表記するものであり、イ�
 京都産業大学大学院 先端情報学研究科 森川 真伍
 
 ## 使用言語
-
+<img alt="GitHub" src=https://img.shields.io/badge/Langage-GO-brightgreen>
 ## ロゴ
 
 ![Sickle2](https://user-images.githubusercontent.com/77278892/235562689-71e6140f-12f5-4f92-8c92-b05d7de244d5.png)
