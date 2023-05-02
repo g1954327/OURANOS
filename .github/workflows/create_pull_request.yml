@@ -1,0 +1,28 @@
+name: create_pull_request
+on:
+  push:
+    branches:
+      - "releases/v*"
+jobs:
+  create_release_pull_request:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check PullRequest Exists
+        id: check_pr
+        env:
+          HEAD_MESSAGE: ${{ github.event.head_commit.message }} 
+        run: |
+          HEAD_REF=${{ github.head_ref }}
+          TAG=${HEAD_REF##*/v}
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          COMMIT_MESSAGE=$(echo "${HEAD_MESSAGE}" | sed -n -e 1p)
+          echo "message=${COMMIT_MESSAGE}" >> "$GITHUB_OUTPUT"
+          echo "count=$(gh pr list -S "Release v${TAG}"in:title | wc -l)”¥
+            >> "$GITHUB_OUTPUT”
+      - name: Create Release Pull Request
+        if: ${{ steps.check_pr.outputs.count == 0 }}
+        run: |
+          gh pr create -B main -a ${{ github.actor }} ¥
+          -t 'Release ${{ steps.check_pr.outputs.tag }} ${{ steps.check_pr.outputs.message }}’ ¥ 
+           --body-file ./.github/RELEASE_WORKFLOW_TEMPLATE.md
