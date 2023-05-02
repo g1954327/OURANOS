@@ -2,7 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/g1954327/ouranos/badge.svg?branch=main)](https://coveralls.io/github/g1954327/ouranos?branch=main)
 [![codebeat badge](https://codebeat.co/badges/9f634397-7dff-4ce7-ba2e-d16ed5bce4c2)](https://codebeat.co/projects/github-com-g1954327-ouranos-main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/g1954327/ouranos)](https://goreportcard.com/report/github.com/g1954327/ouranos)
-
+<img alt="GitHub" src="https://img.shields.io/github/license/g1954327/ouranos">
 
 
 # ouranos
@@ -31,8 +31,10 @@ URLとはインターネット上の所在を表記するものであり、イ�
 
 ## 使用言語
 <img alt="GitHub" src=https://img.shields.io/badge/Langage-GO-brightgreen>
+
 ## ライセンス
 <img alt="GitHub" src="https://img.shields.io/github/license/g1954327/ouranos">
+
 ## ロゴ
 
 ![Sickle2](https://user-images.githubusercontent.com/77278892/235562689-71e6140f-12f5-4f92-8c92-b05d7de244d5.png)
