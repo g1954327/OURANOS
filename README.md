@@ -2,6 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/g1954327/ouranos/badge.svg?branch=main)](https://coveralls.io/github/g1954327/ouranos?branch=main)
 [![codebeat badge](https://codebeat.co/badges/9f634397-7dff-4ce7-ba2e-d16ed5bce4c2)](https://codebeat.co/projects/github-com-g1954327-ouranos-main)
 [![Go Report Card](https://goreportcard.com/badge/github.com/g1954327/ouranos)](https://goreportcard.com/report/github.com/g1954327/ouranos)
+<img alt="Github" src="https://img.shields.io/badge/Developer-Shingo_Morikawa-9cf">
 <img alt="GitHub" src="https://img.shields.io/github/license/g1954327/ouranos">
 <img alt="GitHub" src=https://img.shields.io/badge/Langage-GO-blue>
 <img alt="GitHub" src="https://img.shields.io/badge/Version-0.0.0-important">
@@ -30,6 +31,7 @@ URLとはインターネット上の所在を表記するものであり、イ�
         
 ## 開発者
 京都産業大学大学院 先端情報学研究科 森川 真伍
+<img alt="Github" src="https://img.shields.io/badge/Developer-Shingo_Morikawa-9cf">
 
 ## 使用言語
 Go言語
