@@ -52,7 +52,7 @@ jobs:
           args: >-
             --standalone
             --output=docs/public/index.html
-            --metadata tilte="urakil"
+            --metadata tilte="ouranos"
             README.md
       - name: Deploy Site
         uses: peaceiris/actions-gh-pages@v3
@@ -84,4 +84,4 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            dist/urakil-${{ steps.vars.outputs.tag }}_*.tar.gz
+            dist/ouranos-${{ steps.vars.outputs.tag }}_*.tar.gz
