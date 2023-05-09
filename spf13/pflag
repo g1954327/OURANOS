@@ -1,0 +1,50 @@
+type options struct { 
+  token string
+  qrcode string 
+  config string
+  help bool
+  version bool 
+}
+func buildOptions(args []string) (*options, *flag.FlagSet) { 
+  opts := &options{}
+  flags := flag.NewFlagSet(args[0], flag.ContinueOnError)
+  flags.Usage = func() { fmt.Println(helpMessage(args[0])) }
+  flags.StringVarP(&opts.token, "token", "t", "", "") 
+  flags.StringVarP(&opts.qrcode, "qrcode", "q", "", "") 
+  flags.StringVarP(&opts.config, "config", "c", "", "")
+  flags.BoolVarP(&opts.help, "help", "h", false, "")  
+  flags.BoolVarP(&opts.version, "version", "v", false, "")
+  return opts, flags
+}
+func perform(opts *options, args []string) *UrleapError { 
+  fmt.Println("Hello World")
+  return nil
+}
+func parseOptions(args []string) (*options, []string, *UrleapError) { 
+  opts, flags := buildOptions(args)
+  flags.Parse(args[1:])
+  if opts.help {
+    fmt.Println(helpMessage(args[0]))
+    return nil, nil, &UrleapError{statusCode: 0, message: ""}
+  }
+  if opts.token == "" {
+    return nil, nil,
+      &UrleapError{statusCode: 3, message: "no token was given"}
+  }
+  return opts, flags.Args(), nil
+}
+func goMain(args []string) int {
+  opts, args, err := parseOptions(args)
+  if err != nil {
+    if err.statusCode != 0 {
+      fmt.Println(err.Error())
+    }
+    return err.statusCode
+  }
+  if err := perform(opts, args); err != nil { 
+    fmt.Println(err.Error())
+    return err.statusCode
+  }
+  return 0 
+}
+    
