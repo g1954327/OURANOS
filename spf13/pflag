@@ -25,9 +25,9 @@ func parseOptions(args []string) (*options, []string, *ouranosError) {
     fmt.Println(helpMessage(args[0]))
     return nil, nil, &ouranosError{statusCode: 0, message: ""}
   }
-  if opts.token == "" {
+  if opts.copy == "" {
     return nil, nil,
-      &ouranosError{statusCode: 3, message: "no token was given"}
+      &ouranosError{statusCode: 3, message: "no url was given"}
   }
   return opts, flags.Args(), nil
 }
