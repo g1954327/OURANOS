@@ -16,20 +16,20 @@ func buildOptions(args []string) (*options, *flag.FlagSet) {
   flags.BoolVarP(&opts.version, "version", "v", false, "")
   return opts, flags
 }
-func perform(opts *options, args []string) *UrleapError { 
+func perform(opts *options, args []string) *ouranosError { 
   fmt.Println("Hello World")
   return nil
 }
-func parseOptions(args []string) (*options, []string, *UrleapError) { 
+func parseOptions(args []string) (*options, []string, *ouranosError) { 
   opts, flags := buildOptions(args)
   flags.Parse(args[1:])
   if opts.help {
     fmt.Println(helpMessage(args[0]))
-    return nil, nil, &UrleapError{statusCode: 0, message: ""}
+    return nil, nil, &ouranosError{statusCode: 0, message: ""}
   }
   if opts.token == "" {
     return nil, nil,
-      &UrleapError{statusCode: 3, message: "no token was given"}
+      &ouranosError{statusCode: 3, message: "no token was given"}
   }
   return opts, flags.Args(), nil
 }
