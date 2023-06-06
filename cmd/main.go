@@ -4,13 +4,123 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-
 	flag "github.com/spf13/pflag"
-	"github.com/g1954327/ouranos"
+	//"github.com/g1954327/ouranos"
 )
 
-const VERSION = "0.1.16"
+const VERSION = "0.1.1"
 
+//コマンドラインオプションを管理するためのoptions構造体を定義。
+type options struct {
+	help      bool
+	version   bool
+	past      bool
+	token     string
+}
+
+//ouranosError構造体を定義し、エラーメッセージを表現するためのErrorメソッドの実装。  
+type ouranosError struct {
+	statusCode int
+	message    string
+}
+
+
+func bitlyRequest(opts *options, long_url *string) {
+	fmt.Printf("long_url: %s\n", *long_url)
+	/*
+		json := fmt.Sprintf(`{"long_url": "%s", "domain": "bit.ly"}`, *long_url)
+		requestBody := strings.NewReader(json)
+		request, err := http.NewRequest("POST", "https://api-ssl.bitly.com/v4/shorten", requestBody)
+		if err != nil {
+			log.Fatal(err)
+		}
+		request.Header.Add("Authorization", fmt.Sprintf("Bearer %s", opts.token))
+		request.Header.Add("Content-Type", "application/json")
+		client := &http.Client{}
+		response, err := client.Do(request)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer response.Body.Close()
+		data, err := io.ReadAll(response.Body)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("%s\n", data)*/
+}
+
+//オプションの定義とオプションを解析するためのbuildOptions関数を定義。 
+func buildOptions(args []string) (*options, *flag.FlagSet) {
+	opts := &options{}
+	flags := flag.NewFlagSet(args[0], flag.ContinueOnError)
+	flags.Usage = func() { fmt.Println(helpMessage(args)) }
+	flags.StringVarP(&opts.token, "token", "t", "", "サービスのトークンを指定します。このオプションは必須です。")
+	flags.BoolVarP(&opts.past, "past", "p", false, "過去の履歴を5件表示します")
+	flags.BoolVarP(&opts.help, "help", "h", false, "ヘルプメッセージを表示します。")
+	flags.BoolVarP(&opts.version, "version", "v", false, "バージョンを表示します。")
+	return opts, flags
+}
+//オプションと引数をもとに実行する操作を決定し、実行するためのperform関数を定義。
+func perform(opts *options, args []string) *ouranosError {
+	if opts != nil {
+		fmt.Printf("Token: %s\n", opts.token)
+	}
+	for _, long_url := range args {
+		bitlyRequest(opts, &long_url)
+	}
+	return nil
+}
+
+//オプションを解析し、options構造体と引数を取得するためのparseOptions関数を定義。
+
+func parseOptions(args []string) (*options, []string, *ouranosError) {
+	opts, flags := buildOptions(args)
+	flags.Parse(args[1:])
+	//fmt.Println("go run cmd/main.go",args[1:])
+	f, err := os.Create("cmd/past.txt")
+	str := args[1]
+	fmt.Println("go run cmd/main.go",str)
+	data2 := []byte(str)//byteスライスに格納されている内容がファイルに書き込まれる
+	f.Write(data2)
+	if err != nil {
+		fmt.Println("fail to read file")
+	}
+	defer f.Close()
+	if opts.help {
+		fmt.Println(helpMessage(args))
+		return nil, nil, &ouranosError{statusCode: 0, message: ""}
+	}
+	if opts.version {
+		fmt.Println(versionString(args))
+		return nil, nil, &ouranosError{statusCode: 0, message: ""}
+	}
+	if opts.past {
+		fmt.Println(pastString(args))
+		return nil, nil, &ouranosError{statusCode: 0, message: ""}
+	}
+	if opts.token == "" {
+		return nil, nil, &ouranosError{statusCode: 3, message: "トークンが与えられていません"}
+	}
+	return opts, flags.Args(), nil
+}
+
+//ヘルプメッセージの出力
+func helpMessage(args []string) string {
+	prog := "ouranos"
+	if len(args) > 0 {
+		prog = filepath.Base(args[0])
+	}
+	return fmt.Sprintf(`%s [OPTIONS] [URLs...]
+OPTIONS
+    -t, --token <TOKEN>      サービスのトークンを指定します。このオプションは必須です。
+    -h, --help               ヘルプメッセージを表示します。
+    -v, --version            バージョン情報を表示します。
+	-p, --past               過去の履歴を5件表示します。
+ARGUMENT
+    URL      短縮するURLを指定します。この引数は複数の値を受け付けます。
+	引数が指定されなかった場合、ouranos は利用可能な短縮 URL のリストを表示します。`, prog)
+}
+//バージョン情報の出力
 func versionString(args []string) string {
 	prog := "ouranos"
 	if len(args) > 0 {
@@ -19,196 +129,32 @@ func versionString(args []string) string {
 	return fmt.Sprintf("%s version %s", prog, VERSION)
 }
 
-/*
-helpMessage prints the help message.
-This function is used in the small tests, so it may be called with a zero-length slice.
-*/
-func helpMessage(args []string) string {
-	prog := "ouranos"
-	if len(args) > 0 {
-		prog = filepath.Base(args[0])
+func pastString(args []string) string {
+	f, err := os.Create("cmd/past.txt")
+	str := "write this file is"
+	data2 := []byte(str)//byteスライスに格納されている内容がファイルに書き込まれる
+	f.Write(data2)
+	if err != nil {
+		fmt.Println("fail to read file")
 	}
-	return fmt.Sprintf(`%s [OPTIONS] [URLs...]
-OPTIONS
-    -t, --token <TOKEN>      specify the token for the service. This option is mandatory.
-    -q, --qrcode <FILE>      include QR-code of the URL in the output.
-    -c, --config <CONFIG>    specify the configuration file.
-    -g, --group <GROUP>      specify the group name for the service. Default is "ouranos"
-    -d, --delete             delete the specified shorten URL.
-    -h, --help               print this mesasge and exit.
-    -v, --version            print the version and exit.
-ARGUMENT
-    URL     specify the url for shortening. this arguments accept multiple values.
-            if no arguments were specified, ouranos prints the list of available shorten urls.`, prog)
-}
+	defer f.Close()
 
-type ouranosError struct {
-	statusCode int
-	message    string
+	f2, err := os.Open("cmd/past.txt")
+	data := make([]byte, 1024)
+	count, err := f2.Read(data)
+	if err != nil {
+		fmt.Println("fail to read file")
+	}
+	fmt.Println(string(data[:count]))
+	defer f2.Close()
+	return fmt.Sprintf("past %s", VERSION)
 }
 
 func (e ouranosError) Error() string {
 	return e.message
 }
 
-type flags struct {
-	deleteFlag    bool
-	listGroupFlag bool
-	helpFlag      bool
-	versionFlag   bool
-}
-
-type runOpts struct {
-	token  string
-	qrcode string
-	config string
-	group  string
-}
-
-/*
-This struct holds the values of the options.
-*/
-type options struct {
-	runOpt  *runOpts
-	flagSet *flags
-}
-
-func newOptions() *options {
-	return &options{runOpt: &runOpts{}, flagSet: &flags{}}
-}
-
-func (opts *options) mode(args []string) ouranos.Mode {
-	switch {
-	case opts.flagSet.listGroupFlag:
-		return ouranos.ListGroup
-	case len(args) == 0:
-		return ouranos.List
-	case opts.flagSet.deleteFlag:
-		return ouranos.Delete
-	case opts.runOpt.qrcode != "":
-		return ouranos.QRCode
-	default:
-		return ouranos.Shorten
-	}
-}
-
-/*
-Define the options and return the pointer to the options and the pointer to the flagset.
-*/
-func buildOptions(args []string) (*options, *flag.FlagSet) {
-	opts := newOptions()
-	flags := flag.NewFlagSet(args[0], flag.ContinueOnError)
-	flags.Usage = func() { fmt.Println(helpMessage(args)) }
-	flags.StringVarP(&opts.runOpt.token, "token", "t", "", "specify the token for the service. This option is mandatory.")
-	flags.StringVarP(&opts.runOpt.qrcode, "qrcode", "q", "", "include QR-code of the URL in the output.")
-	flags.StringVarP(&opts.runOpt.config, "config", "c", "", "specify the configuration file.")
-	flags.StringVarP(&opts.runOpt.group, "group", "g", "", "specify the group name for the service. Default is \"ouranos\"")
-	flags.BoolVarP(&opts.flagSet.listGroupFlag, "list-group", "L", false, "list the groups. This is hidden option.")
-	flags.BoolVarP(&opts.flagSet.deleteFlag, "delete", "d", false, "delete the specified shorten URL.")
-	flags.BoolVarP(&opts.flagSet.helpFlag, "help", "h", false, "print this mesasge and exit.")
-	flags.BoolVarP(&opts.flagSet.versionFlag, "version", "v", false, "print the version and exit.")
-	return opts, flags
-}
-
-/*
-parseOptions parses options from the given command line arguments.
-*/
-func parseOptions(args []string) (*options, []string, *ouranosError) {
-	opts, flags := buildOptions(args)
-	flags.Parse(args[1:])
-	if opts.flagSet.helpFlag {
-		fmt.Println(helpMessage(args))
-		return nil, nil, &ouranosError{statusCode: 0, message: ""}
-	}
-	if opts.flagSet.versionFlag {
-		fmt.Println(versionString(args))
-		return nil, nil, &ouranosError{statusCode: 0, message: ""}
-	}
-	if opts.runOpt.token == "" {
-		return nil, nil, &ouranosError{statusCode: 3, message: "no token was given"}
-	}
-	return opts, flags.Args(), nil
-}
-
-func shortenEach(bitly *ouranos.Bitly, config *ouranos.Config, url string) error {
-	result, err := bitly.Shorten(config, url)
-	if err != nil {
-		return err
-	}
-	fmt.Println(result)
-	return nil
-}
-
-func deleteEach(bitly *ouranos.Bitly, config *ouranos.Config, url string) error {
-	return bitly.Delete(config, url)
-}
-
-func listUrls(bitly *ouranos.Bitly, config *ouranos.Config) error {
-	urls, err := bitly.List(config)
-	if err != nil {
-		return err
-	}
-	for _, url := range urls {
-		fmt.Println(url)
-	}
-	return nil
-}
-
-func listGroups(bitly *ouranos.Bitly, config *ouranos.Config) error {
-	groups, err := bitly.Groups(config)
-	if err != nil {
-		return err
-	}
-	for i, group := range groups {
-		fmt.Printf("GUID[%d] %s\n", i, group.Guid)
-	}
-	return nil
-}
-
-func performImpl(args []string, executor func(url string) error) *ouranosError {
-	for _, url := range args {
-		err := executor(url)
-		if err != nil {
-			return makeError(err, 3)
-		}
-	}
-	return nil
-}
-
-func perform(opts *options, args []string) *ouranosError {
-	bitly := ouranos.NewBitly(opts.runOpt.group)
-	config := ouranos.NewConfig(opts.runOpt.config, opts.mode(args))
-	config.Token = opts.runOpt.token
-	switch config.RunMode {
-	case ouranos.List:
-		err := listUrls(bitly, config)
-		return makeError(err, 1)
-	case ouranos.ListGroup:
-		err := listGroups(bitly, config)
-		return makeError(err, 2)
-	case ouranos.Delete:
-		return performImpl(args, func(url string) error {
-			return deleteEach(bitly, config, url)
-		})
-	case ouranos.Shorten:
-		return performImpl(args, func(url string) error {
-			return shortenEach(bitly, config, url)
-		})
-	}
-	return nil
-}
-
-func makeError(err error, status int) *ouranosError {
-	if err == nil {
-		return nil
-	}
-	ue, ok := err.(*ouranosError)
-	if ok {
-		return ue
-	}
-	return &ouranosError{statusCode: status, message: err.Error()}
-}
-
+//メイン関数の実装(goMain関数)を定義し、parseOptionsとperformを呼び出す。 
 func goMain(args []string) int {
 	opts, args, err := parseOptions(args)
 	if err != nil {
@@ -223,7 +169,7 @@ func goMain(args []string) int {
 	}
 	return 0
 }
-
+//メイン関数での処理結果に応じて、終了ステータスを返す。
 func main() {
 	status := goMain(os.Args)
 	os.Exit(status)
