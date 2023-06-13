@@ -76,26 +76,40 @@ func perform(opts *options, args []string) *ouranosError {
 func parseOptions(args []string) (*options, []string, *ouranosError) {
 	opts, flags := buildOptions(args)
 	flags.Parse(args[1:])
-	//fmt.Println("go run cmd/main.go",args[1:])
-	f, err := os.Create("cmd/past.txt")
-	str := args[1]
-	fmt.Println("go run cmd/main.go",str)
-	data2 := []byte(str)//byteスライスに格納されている内容がファイルに書き込まれる
-	f.Write(data2)
+	f, err := os.OpenFile("cmd/past.txt", os.O_RDWR|os.O_APPEND,0666)
+	//defer f.Close()
+	_, err = f.WriteString("go run cmd/main.go ")
+	_, err = f.WriteString(args[1])
+	_, err = f.WriteString("\n")
+	//str := args[1]
+	//fmt.Println("go run cmd/main.go",str)
+	fmt.Println("go run cmd/main.go",args[1:])
+	//data2 := []byte(str)//byteスライスに格納されている内容がファイルに書き込まれる
+	//f.Write(data2)
+	//defer f.Close()
 	if err != nil {
 		fmt.Println("fail to read file")
 	}
 	defer f.Close()
 	if opts.help {
 		fmt.Println(helpMessage(args))
+		_, err = f.WriteString(helpMessage(args))
+		_, err = f.WriteString("\n")
+		_, err = f.WriteString("\n")
 		return nil, nil, &ouranosError{statusCode: 0, message: ""}
 	}
 	if opts.version {
 		fmt.Println(versionString(args))
+		_, err = f.WriteString(versionString(args))
+		_, err = f.WriteString("\n")
+		_, err = f.WriteString("\n")
 		return nil, nil, &ouranosError{statusCode: 0, message: ""}
 	}
 	if opts.past {
 		fmt.Println(pastString(args))
+		_, err = f.WriteString(pastString(args))
+		_, err = f.WriteString("\n")
+		_, err = f.WriteString("\n")
 		return nil, nil, &ouranosError{statusCode: 0, message: ""}
 	}
 	if opts.token == "" {
@@ -122,6 +136,7 @@ ARGUMENT
 }
 //バージョン情報の出力
 func versionString(args []string) string {
+
 	prog := "ouranos"
 	if len(args) > 0 {
 		prog = filepath.Base(args[0])
@@ -130,16 +145,17 @@ func versionString(args []string) string {
 }
 
 func pastString(args []string) string {
-	f, err := os.Create("cmd/past.txt")
-	str := "write this file is"
-	data2 := []byte(str)//byteスライスに格納されている内容がファイルに書き込まれる
-	f.Write(data2)
+	f, err := os.OpenFile("cmd/past.txt", os.O_RDWR|os.O_APPEND,0666)
+	fmt.Println("go run cmd/main.go",args[1])
+	//str := args[1]
+	//data2 := []byte(str)//byteスライスに格納されている内容がファイルに書き込まれる
+	//f.Write(data2)
 	if err != nil {
 		fmt.Println("fail to read file")
 	}
 	defer f.Close()
 
-	f2, err := os.Open("cmd/past.txt")
+	f2, err := os.OpenFile("cmd/past.txt", os.O_RDWR|os.O_APPEND,0666)
 	data := make([]byte, 1024)
 	count, err := f2.Read(data)
 	if err != nil {
@@ -147,6 +163,7 @@ func pastString(args []string) string {
 	}
 	fmt.Println(string(data[:count]))
 	defer f2.Close()
+
 	return fmt.Sprintf("past %s", VERSION)
 }
 
@@ -174,3 +191,4 @@ func main() {
 	status := goMain(os.Args)
 	os.Exit(status)
 }
+
