@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>エンピリカルソフトウェア工学 i2386139</title>
+    <link>https://g1954327.github.io/ouranos/</link>
+    <description>Recent content on エンピリカルソフトウェア工学 i2386139</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-jp</language>
+    <lastBuildDate>Tue, 20 Jun 2023 10:47:52 +0900</lastBuildDate><atom:link href="https://g1954327.github.io/ouranos/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>My First Post</title>
+      <link>https://g1954327.github.io/ouranos/posts/my-first-post/</link>
+      <pubDate>Tue, 20 Jun 2023 10:47:52 +0900</pubDate>
+      
+      <guid>https://g1954327.github.io/ouranos/posts/my-first-post/</guid>
+      <description>hello hugo</description>
+    </item>
+    
+  </channel>
+</rss>

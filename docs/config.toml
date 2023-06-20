@@ -1,0 +1,19 @@
+baseURL = "https://g1954327.github.io/ouranos/"
+languageCode = 'ja-jp'
+themesDir = "themes"
+title = 'エンピリカルソフトウェア工学 i2386139'
+theme = "m10c"
+defaultContentLanguage = "ja"
+
+[params]
+    author = "i2386139"
+    description = "左"
+    avatar = "./images/amahamiu.jpg"
+[params.style]
+    darkestColor = "#50C878" #サイドバー背景
+    darkColor = "#AFDFE4" #メイン背景
+    lightColor = "#2a2a2a" #フォント色
+    lightestColor = "#F15B47" #タイトル
+    primaryColor = "#ffffff" #テーマカラー
+
+
