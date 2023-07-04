@@ -4,12 +4,6 @@ import (
 	"testing"
 )
 
-func Example_Version() {
-	goMain([]string{"./ouranos", "--version"})
-	// Output:
-	// トークンが指定されていません
-}
-
 func Example_Token() {
 	goMain([]string{"./ouranos", "--token"})
 	// Output:
@@ -17,7 +11,7 @@ func Example_Token() {
 }
 
 func Example_Past() {
-	goMain([]string{"./ouranos", "-past"})
+	goMain([]string{"./ouranos", "--past"})
 	// Output:
 	// トークンが指定されていません
 }
@@ -43,7 +37,7 @@ func Example_Help() {
 }
 
 func Test_Main(t *testing.T) {
-	if status := goMain([]string{"./ouranos", "-v"}); status != 0 {
+	if status := goMain([]string{"./ouranos", "--version"}); status != 0 {
 		t.Error("Expected 0, got ", status)
 	}
 }
