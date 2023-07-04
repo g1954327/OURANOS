@@ -49,6 +49,8 @@ func bitlyRequest(opts *options, long_url *string) {
 		fmt.Printf("%s\n", data)*/
 }
 
+var completions bool
+
 //オプションの定義とオプションを解析するためのbuildOptions関数を定義。 
 func buildOptions(args []string) (*options, *flag.FlagSet) {
 	opts := &options{}
@@ -58,6 +60,8 @@ func buildOptions(args []string) (*options, *flag.FlagSet) {
 	flags.BoolVarP(&opts.past, "past", "p", false, "過去の履歴を5件表示します")
 	flags.BoolVarP(&opts.help, "help", "h", false, "ヘルプメッセージを表示します。")
 	flags.BoolVarP(&opts.version, "version", "v", false, "バージョンを表示します。")
+	flags.BoolVarP(&completions, "generate-completions", "", false, "generate completions") 
+	flags.MarkHidden("generate-completions")
 	return opts, flags
 }
 //オプションと引数をもとに実行する操作を決定し、実行するためのperform関数を定義。
@@ -76,7 +80,7 @@ func perform(opts *options, args []string) *ouranosError {
 func parseOptions(args []string) (*options, []string, *ouranosError) {
 	opts, flags := buildOptions(args)
 	flags.Parse(args[1:])
-	f, err := os.OpenFile("cmd/past.txt", os.O_RDWR|os.O_APPEND,0666)
+	f, err := os.OpenFile("past.txt", os.O_RDWR|os.O_APPEND,0666)
 	//defer f.Close()
 	_, err = f.WriteString("go run cmd/main.go ")
 	_, err = f.WriteString(args[1])
@@ -191,4 +195,5 @@ func main() {
 	status := goMain(os.Args)
 	os.Exit(status)
 }
+
 
