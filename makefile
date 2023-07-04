@@ -3,12 +3,12 @@ VERSION := 0.1.16
 NAME := ouranos
 DIST := $(NAME)-$(VERSION)
 
-ouranos: coverage.out
-	go build -o ouranos $(PACKAGE_LIST)
+$(NAME): coverage.out
+	go build -o $(NAME) cmd/$(NAME)/main.go cmd/$(NAME)/generate_completion.go
 
 coverage.out:
 	go test -covermode=count \
-		-coverprofile=coverage.out $(PACKAGE_LIST)
+			-coverprofile=coverage.out $(PACKAGE_LIST)
 
 docker: ouranos
 #	docker build -t ghcr.io/g1954327/ouranos:$(VERSION) -t ghcr.io/g1954327/ouranos:latest .
@@ -37,3 +37,4 @@ distclean: clean
 
 clean:
 	rm -f ouranos coverage.out
+	rm -rf completions cmd/ouranos/completions
