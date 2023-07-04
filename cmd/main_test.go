@@ -33,12 +33,13 @@ func Example_Help() {
 	// Output:
 	// ouranos [OPTIONS] [URLs...]
 	// OPTIONS
-	//     -t, --token <TOKEN>      specify the token for the service. This option is mandatory.
-	//     -h, --help               print this mesasge and exit.
-	//     -v, --version            print the version and exit.
+	//     -t, --token <TOKEN>      サービスのトークンを指定します。このオプションは必須です。
+	//     -h, --help               ヘルプメッセージを表示します。
+	//     -v, --version            バージョン情報を表示します。
+	//     -p, --past               過去の履歴を5件表示します。
 	// ARGUMENT
-	//     URL     specify the url for shortening. this arguments accept multiple values.
-	//             if no arguments were specified, ouranos prints the list of available shorten urls.
+	//     URL                      短縮するURLを指定します。この引数は複数の値を受け付けます。
+	//                              引数が指定されなかった場合、ouranos は利用可能な短縮 URL のリストを表示します。
 }
 
 func Test_Main(t *testing.T) {
