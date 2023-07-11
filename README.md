@@ -13,13 +13,13 @@ URLとはインターネット上の所在を表記するものであり、イ�
 
 ## 使用方法
     $ ouranos -h  
-    ouranos version : 0.00  最終更新 4/25
+    ouranos version : 0.00  最終更新 7/11
     ouranos [command] <URL>
     command
-        -v , --version       このアプリケーションのバージョンを説明する。 
-        -h , --help          このメッセージを表示する。
-        -l , --long          元々のURLも出力する
-        -c , --copy          出力した短縮URLをコピーする。つまりcmd+vを押すと短縮URLがペーストできる。
+        -v , --version       このアプリケーションのバージョン情報を表示します。 
+        -h , --help          ヘルプメッセージを表示します。
+        -t, --token <TOKEN>  サービスのトークンを指定します。このオプションは必須です。
+        -p , --past          過去の履歴を5件表示します。
         
 ## インストール方法 (まだ途中)
     $ brew install ouranos ?
