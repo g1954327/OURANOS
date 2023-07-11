@@ -1,5 +1,5 @@
 PACKAGE_LIST := $(shell go list ./...)
-VERSION := 0.1.16
+VERSION := 0.1.1
 NAME := ouranos
 DIST := $(NAME)-$(VERSION)
 
@@ -37,4 +37,3 @@ distclean: clean
 
 clean:
 	rm -f ouranos coverage.out
-	rm -rf completions cmd/ouranos/completions
