@@ -2,42 +2,65 @@ package main
 
 import (
 	"testing"
+	"fmt"
 )
+
+func Example_Version() {
+	goMain([]string{"./ouranos", "--version"})
+	// Output:
+	// ouranos version 0.1.1
+}
 
 func Example_Token() {
 	goMain([]string{"./ouranos", "--token"})
 	// Output:
-	// トークンが指定されていません
-}
-
-func Example_Past() {
-	goMain([]string{"./ouranos", "--past"})
-	// Output:
-	// トークンが指定されていません
+	// トークンが与えられていません
 }
 
 func Example_Completion() {
 	goMain([]string{"./ouranos", "--generate-completions"})
 	// Output:
-	// トークンが指定されていません
+	// トークンが与えられていません
 }
 
 func Example_Help() {
 	goMain([]string{"./ouranos", "--help"})
-	// Output:
-	// ouranos [OPTIONS] [URLs...]
-	// OPTIONS
-	//     -t, --token <TOKEN>      サービスのトークンを指定します。このオプションは必須です。
-	//     -h, --help               ヘルプメッセージを表示します。
-	//     -v, --version            バージョン情報を表示します。
-	//     -p, --past               過去の履歴を5件表示します。
-	// ARGUMENT
-	//     URL                      短縮するURLを指定します。この引数は複数の値を受け付けます。
-	//                              引数が指定されなかった場合、ouranos は利用可能な短縮 URL のリストを表示します。
+	//     Output:
+	//     ouranos [OPTIONS] [URLs...]
+	//     OPTIONS
+	//         -t, --token <TOKEN>      サービスのトークンを指定します。このオプションは必須です。
+	//         -h, --help               ヘルプメッセージを表示します。
+	//         -v, --version            バージョン情報を表示します。
+	//         -p, --past               過去の履歴を5件表示します。
+	//     ARGUMENT
+	//         URL                      短縮するURLを指定します。この引数は複数の値を受け付けます。
+	//                                  引数が指定されなかった場合、ouranosは利用可能な短縮URLのリストを表示します。
 }
 
-func Test_Main(t *testing.T) {
-	if status := goMain([]string{"./ouranos", "--version"}); status != 0 {
+func Test_Main_Help(t *testing.T) {
+	fmt.Println("Help")
+	if status := goMain([]string{"./ouranos", "-h"}); status != 0 {
+		t.Error("Expected 0, got ", status)
+	}
+}
+
+func Test_Main_Version(t *testing.T) {
+	fmt.Println("Version")
+	if status := goMain([]string{"./ouranos", "-v"}); status != 0 {
+		t.Error("Expected 0, got ", status)
+	}
+}
+
+func Test_Main_Token(t *testing.T) {
+	fmt.Println("Token")
+	if status := goMain([]string{"./ouranos", "-t"}); status != 3 {
+		t.Error("Expected 3, got ", status)
+	}
+}
+
+func Test_Main_Past(t *testing.T) {
+	fmt.Println("Past")
+	if status := goMain([]string{"./ouranos", "-p"}); status != 0 {
 		t.Error("Expected 0, got ", status)
 	}
 }
