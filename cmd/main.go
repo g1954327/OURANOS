@@ -1,11 +1,9 @@
 package main
 
 import (
-	//"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
-
 	"github.com/g1954327/ouranos"
 	flag "github.com/spf13/pflag"
 )
@@ -58,6 +56,13 @@ type options struct {
 	flagSet   *flags
 }
 
+type flags struct {
+	deleteFlag     bool
+	listGroupFlag  bool
+	input_fileFlag bool
+}
+
+
 type runOpts struct {
 	token  string
 	qrcode string
@@ -68,7 +73,7 @@ type runOpts struct {
 var completions bool
 
 func newOptions() *options {
-	return &options{runOpt: &runOpts{}, flagSet: &flags{}}
+	return &options{runOpt: &runOpts{}}
 }
 
 func (opts *options) mode(args []string) ouranos.Mode {
@@ -98,19 +103,6 @@ func buildOptions(args []string) (*options, *flag.FlagSet) {
 	flags.BoolVarP(&completions, "generate-completions", "", false, "generate completions") 
 	flags.MarkHidden("generate-completions")
 	return opts, flags
-}
-
-func (opts *options) mode(args []string) ouranos.Mode {
-	switch {
-	case opts.flagSet.listGroupFlag:
-		return ouranos.ListGroup
-	case len(args) == 0:
-		return ouranos.List
-	case opts.flagSet.deleteFlag:
-		return ouranos.Delete
-	default:
-		return ouranos.Shorten
-	}
 }
 
 //オプションを解析し、options構造体と引数を取得するためのparseOptions関数を定義。
