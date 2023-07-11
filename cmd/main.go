@@ -5,7 +5,6 @@ import (
 	"os"
 	"path/filepath"
 	flag "github.com/spf13/pflag"
-	//"github.com/g1954327/ouranos"
 )
 
 const VERSION = "0.1.1"
@@ -24,29 +23,8 @@ type ouranosError struct {
 	message    string
 }
 
-
 func bitlyRequest(opts *options, long_url *string) {
 	fmt.Printf("long_url: %s\n", *long_url)
-	/*
-		json := fmt.Sprintf(`{"long_url": "%s", "domain": "bit.ly"}`, *long_url)
-		requestBody := strings.NewReader(json)
-		request, err := http.NewRequest("POST", "https://api-ssl.bitly.com/v4/shorten", requestBody)
-		if err != nil {
-			log.Fatal(err)
-		}
-		request.Header.Add("Authorization", fmt.Sprintf("Bearer %s", opts.token))
-		request.Header.Add("Content-Type", "application/json")
-		client := &http.Client{}
-		response, err := client.Do(request)
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer response.Body.Close()
-		data, err := io.ReadAll(response.Body)
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Printf("%s\n", data)*/
 }
 
 var completions bool
@@ -81,16 +59,10 @@ func parseOptions(args []string) (*options, []string, *ouranosError) {
 	opts, flags := buildOptions(args)
 	flags.Parse(args[1:])
 	f, err := os.OpenFile("past.txt", os.O_RDWR|os.O_APPEND,0666)
-	//defer f.Close()
 	_, err = f.WriteString("go run cmd/main.go ")
 	_, err = f.WriteString(args[1])
 	_, err = f.WriteString("\n")
-	//str := args[1]
-	//fmt.Println("go run cmd/main.go",str)
-	fmt.Println("go run cmd/main.go",args[1:])
-	//data2 := []byte(str)//byteスライスに格納されている内容がファイルに書き込まれる
-	//f.Write(data2)
-	//defer f.Close()
+	//fmt.Println("go run cmd/main.go",args[1:])
 	if err != nil {
 		fmt.Println("fail to read file")
 	}
@@ -129,18 +101,17 @@ func helpMessage(args []string) string {
 		prog = filepath.Base(args[0])
 	}
 	return fmt.Sprintf(`%s [OPTIONS] [URLs...]
-OPTIONS
-    -t, --token <TOKEN>      サービスのトークンを指定します。このオプションは必須です。
-    -h, --help               ヘルプメッセージを表示します。
-    -v, --version            バージョン情報を表示します。
-    -p, --past               過去の履歴を5件表示します。
-ARGUMENT
-    URL      短縮するURLを指定します。この引数は複数の値を受け付けます。
-	引数が指定されなかった場合、ouranos は利用可能な短縮 URL のリストを表示します。`, prog)
+    OPTIONS
+        -t, --token <TOKEN>      サービスのトークンを指定します。このオプションは必須です。
+        -h, --help               ヘルプメッセージを表示します。
+        -v, --version            バージョン情報を表示します。
+        -p, --past               過去の履歴を5件表示します。
+    ARGUMENT
+        URL                      短縮するURLを指定します。この引数は複数の値を受け付けます。
+                                 引数が指定されなかった場合、ouranosは利用可能な短縮URLのリストを表示します。`, prog)
 }
 //バージョン情報の出力
 func versionString(args []string) string {
-
 	prog := "ouranos"
 	if len(args) > 0 {
 		prog = filepath.Base(args[0])
@@ -149,20 +120,17 @@ func versionString(args []string) string {
 }
 
 func pastString(args []string) string {
-	f, err := os.OpenFile("cmd/past.txt", os.O_RDWR|os.O_APPEND,0666)
-	fmt.Println("go run cmd/main.go",args[1])
-	//str := args[1]
-	//data2 := []byte(str)//byteスライスに格納されている内容がファイルに書き込まれる
-	//f.Write(data2)
+	f, err := os.OpenFile("past.txt", os.O_RDWR|os.O_APPEND,0666)
+	//fmt.Println("go run main.go",args[1])
 	if err != nil {
 		fmt.Println("fail to read file")
 	}
 	defer f.Close()
 
-	f2, err := os.OpenFile("cmd/past.txt", os.O_RDWR|os.O_APPEND,0666)
+	f2, err2 := os.OpenFile("past.txt", os.O_RDWR|os.O_APPEND,0666)
 	data := make([]byte, 1024)
-	count, err := f2.Read(data)
-	if err != nil {
+	count, err2 := f2.Read(data)
+	if err2 != nil {
 		fmt.Println("fail to read file")
 	}
 	fmt.Println(string(data[:count]))
@@ -195,5 +163,3 @@ func main() {
 	status := goMain(os.Args)
 	os.Exit(status)
 }
-
-
