@@ -4,7 +4,7 @@ NAME := ouranos
 DIST := $(NAME)-$(VERSION)
 
 $(NAME): coverage.out
-	go build -o $(NAME) cmd/$(NAME)/main.go cmd/$(NAME)/generate_completion.go
+        go build -o $(NAME) cmd/$(NAME)/main.go cmd/$(NAME)/generate_completion.go
 
 coverage.out:
 	go test -covermode=count \
