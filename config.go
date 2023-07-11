@@ -10,9 +10,6 @@ type Mode int
 const (
 	Shorten Mode = iota + 1
 	List
-	ListGroup
-	Delete
-	QRCode
 )
 
 func NewConfig(token string, mode Mode) *Config {
@@ -25,12 +22,6 @@ func (m Mode) String() string {
 		return "shorten"
 	case List:
 		return "list"
-	case ListGroup:
-		return "listgroup"
-	case Delete:
-		return "delete"
-	case QRCode:
-		return "qrcode"
 	default:
 		return "unknown"
 	}
