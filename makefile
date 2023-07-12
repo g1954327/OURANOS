@@ -1,12 +1,15 @@
-VERSION := 0.1.1
+VERSION := 0.1.16
 NAME := ouranos
 DIST := $(NAME)-$(VERSION)
 USER_NAME := g1954327
 REPO_NAME := $(USER_NAME)/$(NAME)
 PACKAGE_LIST := $(shell go list ./...)
 
+# $(NAME): coverage.out cmd/$(NAME)/main.go *.go
+# $(NAME): coverage.out cmd/$(NAME)/main.go cmd/$(NAME)/generate_completion.go *.go
 $(NAME): coverage.out
 	go build -o $(NAME) cmd/$(NAME)/main.go cmd/$(NAME)/generate_completion.go
+# 	go build -o $(NAME) cmd/$(NAME)/main.go
 
 coverage.out:
 	go test -covermode=count \
