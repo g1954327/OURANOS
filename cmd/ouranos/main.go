@@ -1,7 +1,6 @@
 package main
 
 import (
-	//"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,7 +8,7 @@ import (
 	flag "github.com/spf13/pflag"
 )
 
-const VERSION = "0.1.1"
+const VERSION = "0.1.16"
 
 //バージョン情報の出力
 func versionString(args []string) string {
@@ -31,7 +30,7 @@ func helpMessage(args []string) string {
         -t, --token <TOKEN>      サービスのトークンを指定します。このオプションは必須です。
         -h, --help               ヘルプメッセージを表示します。
         -v, --version            バージョン情報を表示します。
-        -p, --past               過去の履歴を5件表示します。
+        -p, --past               過去の短縮URLの履歴を5件表示します。
     ARGUMENT
         URL                      短縮するURLを指定します。この引数は複数の値を受け付けます。
                                  引数が指定されなかった場合、ouranosは利用可能な短縮URLのリストを表示します。`, prog)
@@ -94,7 +93,7 @@ func buildOptions(args []string) (*options, *flag.FlagSet) {
 	flags := flag.NewFlagSet(args[0], flag.ContinueOnError)
 	flags.Usage = func() { fmt.Println(helpMessage(args)) }
 	flags.StringVarP(&opts.token, "token", "t", "", "サービスのトークンを指定します。このオプションは必須です。")
-	flags.BoolVarP(&opts.past, "past", "p", false, "過去の履歴を5件表示します")
+	flags.BoolVarP(&opts.past, "past", "p", false, "過去の短縮URLの履歴を5件表示します")
 	flags.BoolVarP(&opts.help, "help", "h", false, "ヘルプメッセージを表示します。")
 	flags.BoolVarP(&opts.version, "version", "v", false, "バージョンを表示します。")
 	flags.BoolVarP(&completions, "generate-completions", "", false, "generate completions") 
@@ -107,25 +106,20 @@ func parseOptions(args []string) (*options, []string, *OuranosError) {
 	opts, flags := buildOptions(args)
 	flags.Parse(args[1:])
 	f, err := os.OpenFile("past.txt", os.O_RDWR|os.O_APPEND,0666)
-	_, err = f.WriteString("go run cmd/main.go ")
-	_, err = f.WriteString(args[1])
-	_, err = f.WriteString("\n")
 	if err != nil {
 		fmt.Println("fail to read file")
 	}
 	defer f.Close()
+	if completions{
+		fmt.Println("GenerateCompletion")
+		GenerateCompletion(flags)
+	}
 	if opts.help {
 		fmt.Println(helpMessage(args))
-		_, err = f.WriteString(helpMessage(args))
-		_, err = f.WriteString("\n")
-		_, err = f.WriteString("\n")
 		return nil, nil, &OuranosError{statusCode: 0, message: ""}
 	}
 	if opts.version {
 		fmt.Println(versionString(args))
-		_, err = f.WriteString(versionString(args))
-		_, err = f.WriteString("\n")
-		_, err = f.WriteString("\n")
 		return nil, nil, &OuranosError{statusCode: 0, message: ""}
 	}
 	if opts.past {
