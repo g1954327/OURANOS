@@ -1,4 +1,4 @@
-VERSION := 0.1.16
+VERSION := 0.2.1
 NAME := ouranos
 DIST := $(NAME)-$(VERSION)
 USER_NAME := g1954327
