@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"bufio"
 	"os"
 	"path/filepath"
 	"github.com/g1954327/ouranos"
 	flag "github.com/spf13/pflag"
 )
 
-const VERSION = "0.1.16"
+const VERSION = "0.2.1"
 
 //バージョン情報の出力
 func versionString(args []string) string {
@@ -31,6 +32,8 @@ func helpMessage(args []string) string {
         -h, --help               ヘルプメッセージを表示します。
         -v, --version            バージョン情報を表示します。
         -p, --past               過去の短縮URLの履歴を5件表示します。
+		-g, --group <GROUP>      サービスのグループ名を指定します。デフォルトは "ouranos"です。
+    	-d, --delete             指定された短縮URLを削除する。
     ARGUMENT
         URL                      短縮するURLを指定します。この引数は複数の値を受け付けます。
                                  引数が指定されなかった場合、ouranosは利用可能な短縮URLのリストを表示します。`, prog)
@@ -41,7 +44,7 @@ type OuranosError struct {
 	statusCode int
 	message    string
 }
-
+//エラーメッセージを表現するためのメソッド
 func (e OuranosError) Error() string {
 	return e.message
 }
@@ -55,13 +58,12 @@ type options struct {
 	runOpt    *runOpts
 	flagSet   *flags
 }
-
+//コマンドラインフラグを管理するための構造体
 type flags struct {
 	deleteFlag     bool
 	listGroupFlag  bool
 }
-
-
+//実行オプションを管理するための構造体
 type runOpts struct {
 	token  string
 	config string
@@ -69,9 +71,9 @@ type runOpts struct {
 }
 
 var completions bool
-
+//options 構造体のインスタンスを生成して返すための関数
 func newOptions() *options {
-	return &options{runOpt: &runOpts{}}
+	return &options{runOpt: &runOpts{},flagSet: &flags{}}
 }
 
 func (opts *options) mode(args []string) ouranos.Mode {
@@ -89,10 +91,14 @@ func (opts *options) mode(args []string) ouranos.Mode {
 
 //オプションの定義とオプションを解析するためのbuildOptions関数を定義。 
 func buildOptions(args []string) (*options, *flag.FlagSet) {
-	opts := &options{}
+	//opts := &options{}
+	opts := newOptions()
 	flags := flag.NewFlagSet(args[0], flag.ContinueOnError)
 	flags.Usage = func() { fmt.Println(helpMessage(args)) }
-	flags.StringVarP(&opts.token, "token", "t", "", "サービスのトークンを指定します。このオプションは必須です。")
+	flags.StringVarP(&opts.runOpt.token, "token", "t", "", "サービスのトークンを指定します。このオプションは必須です。")
+	flags.StringVarP(&opts.runOpt.group, "group", "g", "", "サービスのグループ名を指定します。デフォルトは ouranos")
+	flags.BoolVarP(&opts.flagSet.listGroupFlag, "list-group", "L", false, "グループをリストアップする。これは隠しオプションです。")
+	flags.BoolVarP(&opts.flagSet.deleteFlag, "delete", "d", false, "指定された短縮URLを削除する。")
 	flags.BoolVarP(&opts.past, "past", "p", false, "過去の短縮URLの履歴を5件表示します")
 	flags.BoolVarP(&opts.help, "help", "h", false, "ヘルプメッセージを表示します。")
 	flags.BoolVarP(&opts.version, "version", "v", false, "バージョンを表示します。")
@@ -105,15 +111,10 @@ func buildOptions(args []string) (*options, *flag.FlagSet) {
 func parseOptions(args []string) (*options, []string, *OuranosError) {
 	opts, flags := buildOptions(args)
 	flags.Parse(args[1:])
-	f, err := os.OpenFile("past.txt", os.O_RDWR|os.O_APPEND,0666)
-	if err != nil {
-		fmt.Println("fail to read file")
-	}
-	defer f.Close()
-	if completions{
-		fmt.Println("GenerateCompletion")
-		GenerateCompletion(flags)
-	}
+	//if completions{
+	//	fmt.Println("GenerateCompletion")
+	//	GenerateCompletion(flags)
+	//}
 	if opts.help {
 		fmt.Println(helpMessage(args))
 		return nil, nil, &OuranosError{statusCode: 0, message: ""}
@@ -124,50 +125,79 @@ func parseOptions(args []string) (*options, []string, *OuranosError) {
 	}
 	if opts.past {
 		fmt.Println(pastString(args))
-		_, err = f.WriteString(pastString(args))
-		_, err = f.WriteString("\n")
-		_, err = f.WriteString("\n")
 		return nil, nil, &OuranosError{statusCode: 0, message: ""}
 	}
-	if opts.token == "" {
+	if opts.runOpt.token == "" {
 		return nil, nil, &OuranosError{statusCode: 3, message: "トークンが与えられていません"}
 	}
 	return opts, flags.Args(), nil
 }
-
+//過去の短縮URLの履歴を読み込み、最新の5件を表示するための関数
 func pastString(args []string) string {
+	//ファイルを読み取り開ける
 	f, err := os.OpenFile("past.txt", os.O_RDWR|os.O_APPEND,0666)
-	//fmt.Println("go run main.go",args[1])
 	if err != nil {
 		fmt.Println("fail to read file")
 	}
 	defer f.Close()
 
+	//ファイルから読み出し
 	f2, err2 := os.OpenFile("past.txt", os.O_RDWR|os.O_APPEND,0666)
 	data := make([]byte, 1024)
 	count, err2 := f2.Read(data)
 	if err2 != nil {
 		fmt.Println("fail to read file")
 	}
-	fmt.Println(string(data[:count]))
 	defer f2.Close()
 
-	return fmt.Sprintf("past %s", VERSION)
+	return string(data[:count])
 }
-
+//指定されたURLを短縮し、結果を表示するための関数
 func shortenEach(bitly *ouranos.Bitly, config *ouranos.Config, url string) error {
+	f, err := os.OpenFile("past.txt", os.O_RDWR|os.O_APPEND,0666)
+	line :=0
+	var slice []string
+	var slice1 []string
+	if err != nil {
+		fmt.Println("fail to read file")
+	}
+	scanner := bufio.NewScanner(f)
+
+    //データを１行読み込み
+    for scanner.Scan() {
+		entry := scanner.Text() //一行を保持
+		slice = append(slice,entry)
+		line++;
+    }
+	defer f.Close()
+
+	if line > 8 { //8行より大きかったら(履歴が5件以上あったら)
+		f_o, err := os.OpenFile("past.txt", os.O_RDWR|os.O_CREATE|os.O_TRUNC,0666)
+  		if err != nil {
+    		fmt.Println(err)
+  		}
+		slice1 = append(slice[:0],slice[line-8:]...)
+		for i := 0; i<8; i++{
+			_, err = f_o.WriteString(slice1[i])
+			_, err = f_o.WriteString("\n")
+		}
+  		defer f_o.Close()
+	}
 	result, err := bitly.Shorten(config, url)
 	if err != nil {
 		return err
 	}
 	fmt.Println(result)
+	_, err = f.WriteString(result.String())
+    _, err = f.WriteString("\n")
+	_, err = f.WriteString("\n")
 	return nil
 }
-
+//指定されたURLを削除するための関数
 func deleteEach(bitly *ouranos.Bitly, config *ouranos.Config, url string) error {
 	return bitly.Delete(config, url)
 }
-
+//現在の短縮URLのリストを表示するための関数
 func listUrls(bitly *ouranos.Bitly, config *ouranos.Config) error {
 	urls, err := bitly.List(config)
 	if err != nil {
@@ -178,7 +208,7 @@ func listUrls(bitly *ouranos.Bitly, config *ouranos.Config) error {
 	}
 	return nil
 }
-
+//グループのリストを表示するための関数
 func listGroups(bitly *ouranos.Bitly, config *ouranos.Config) error {
 	groups, err := bitly.Groups(config)
 	if err != nil {
@@ -189,7 +219,7 @@ func listGroups(bitly *ouranos.Bitly, config *ouranos.Config) error {
 	}
 	return nil
 }
-
+//引数のURLごとに指定された関数を実行するための関数
 func performImpl(args []string, executor func(url string) error) *OuranosError {
 	for _, url := range args {
 		err := executor(url)
@@ -223,7 +253,7 @@ func perform(opts *options, args []string) *OuranosError {
 	}
 	return nil
 }
-
+//エラーを OuranosError 構造体に変換するための関数
 func makeError(err error, status int) *OuranosError {
 	if err == nil {
 		return nil
