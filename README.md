@@ -13,7 +13,7 @@ URLとはインターネット上の所在を表記するものであり、イ�
 
 ## 使用方法
     $ ouranos -h  
-    ouranos version : 0.00  最終更新 7/11
+    ouranos version : 0.2.1  最終更新 7/14
     ouranos [command] <URL>
     command
         -t, --token <TOKEN>      サービスのトークンを指定します。このオプションは必須です。
