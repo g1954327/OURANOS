@@ -58,7 +58,7 @@
 <a href="https://codebeat.co/projects/github-com-g1954327-ouranos-main"><img src="https://codebeat.co/badges/9f634397-7dff-4ce7-ba2e-d16ed5bce4c2" alt="codebeat badge"></a>
 <a href="https://goreportcard.com/report/github.com/g1954327/ouranos"><img src="https://goreportcard.com/badge/github.com/g1954327/ouranos" alt="Go Report Card"></a></p>
 <p>
-  <img alt="Github" src="https://img.shields.io/badge/Developer-Shingo_Morikawa-blueviolet"> <img alt="GitHub" src="https://img.shields.io/github/license/g1954327/ouranos"> <img alt="GitHub" src=https://img.shields.io/badge/Langage-GO-blue> <img alt="GitHub" src="https://img.shields.io/badge/Version-0.0.0-important">
+  <img alt="Github" src="https://img.shields.io/badge/Developer-Shingo_Morikawa-blueviolet"> <img alt="GitHub" src="https://img.shields.io/github/license/g1954327/ouranos"> <img alt="GitHub" src=https://img.shields.io/badge/Langage-GO-blue> <img alt="GitHub" src="https://img.shields.io/badge/Version-0.2.1-important">
 </p>
 <h1 id="ouranos">ouranos</h1>
 <p>URLを渡すと短縮されたURLを出力してくれるCLIです。</p>
@@ -67,18 +67,21 @@
 <h2 id="使用方法">使用方法</h2>
 <div style="padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px; background-color: #5AFF19;">
   $ ouranos -h  <br/>
-ouranos version : 0.00  最終更新 4/25  <br/>
+ouranos version : 0.2.1  最終更新 7/14  <br/>
 ouranos [command] &lt;URL&gt; <br/>
 command <br/>
--v , --version       このアプリケーションのバージョンを説明する。  <br/>
--h , --help          このメッセージを表示する。 <br/>
--l , --long          元々のURLも出力する <br/>
--c , --copy          出力した短縮URLをコピーする。つまりcmd+vを押すと短縮URLがペーストできる。 <br/>
+-t, --token <TOKEN>      サービスのトークンを指定します。このオプションは必須です。 <br/>
+-h, --help               ヘルプメッセージを表示します。 <br/>
+-v, --version            バージョン情報を表示します。 <br/>
+-p, --past               過去の短縮URLの履歴を5件表示します。 <br/>
+-g, --group <GROUP>      サービスのグループ名を指定します。デフォルトは "ouranos"です。 <br/>
+-d, --delete             指定された短縮URLを削除する。 <br/>
+        
      
 </div>
-<h2 id="インストール方法-まだ途中">インストール方法 (まだ途中)</h2>
+<h2 id="インストール方法">インストール方法</h2>
 <div style="padding: 10px; margin-bottom: 10px; border: 1px solid #333333; border-radius: 10px; background-color: #5AFF19;">
-    $ brew install ouranos ?
+    $ brew install g1954327/tap/ouranos
 </div>
 <h1 id="このプロジェクトについて">このプロジェクトについて</h1>
 <h2 id="開発者">開発者</h2>
@@ -91,7 +94,7 @@ command <br/>
 <p>MITライセンス</p>
 <img alt="GitHub" src="https://img.shields.io/github/license/g1954327/ouranos">
 <h2 id="バージョン">バージョン</h2>
-<img alt="GitHub" src="https://img.shields.io/badge/Version-0.0.0-important">
+<img alt="GitHub" src="https://img.shields.io/badge/Version-0.2.1-important">
 <h2 id="ロゴ">ロゴ</h2>
 <p><img src="https://user-images.githubusercontent.com/77278892/235562689-71e6140f-12f5-4f92-8c92-b05d7de244d5.png" alt="Sickle2"></p>
 <h2 id="名前の由来">名前の由来</h2>
