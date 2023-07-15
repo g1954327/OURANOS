@@ -13,15 +13,17 @@ URLとはインターネット上の所在を表記するものであり、イ�
 
 ## 使用方法
     $ ouranos -h  
-    ouranos version : 0.2.1  最終更新 7/14
-    ouranos [command] <URL>
-    command
-        -t, --token <TOKEN>      サービスのトークンを指定します。このオプションは必須です。
-        -h, --help               ヘルプメッセージを表示します。
-        -v, --version            バージョン情報を表示します。
-        -p, --past               過去の短縮URLの履歴を5件表示します。
-        -g, --group <GROUP>      サービスのグループ名を指定します。デフォルトは "ouranos"です。
-        -d, --delete             指定された短縮URLを削除する。
+    ouranos [OPTIONS] [URLs...] 
+        OPTIONS <br/>
+            -t, --token <TOKEN>      サービスのトークンを指定します。このオプションは必須です。 
+            -h, --help               ヘルプメッセージを表示します。 
+            -v, --version            バージョン情報を表示します。 
+            -p, --past               過去の短縮URLの履歴を5件表示します。 
+            -g, --group <GROUP>      サービスのグループ名を指定します。デフォルトは "ouranos"です。 
+            -d, --delete             指定された短縮URLを削除する。 
+        ARGUMENT <br/>
+            URL                      短縮するURLを指定します。この引数は複数の値を受け付けます。 
+                                     引数が指定されなかった場合、ouranosは利用可能な短縮URLのリストを表示します。 
         
 ## インストール方法 
     $ brew install g1954327/tap/ouranos
