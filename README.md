@@ -46,7 +46,7 @@ MITライセンス
 
 ## バージョン
 
-<img alt="GitHub" src="https://img.shields.io/badge/Version-0.0.0-important">
+<img alt="GitHub" src="https://img.shields.io/badge/Version-0.2.1-important">
 
 ## ロゴ
 
