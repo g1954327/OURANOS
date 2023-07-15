@@ -32,7 +32,7 @@ func helpMessage(args []string) string {
         -h, --help               ヘルプメッセージを表示します。
         -v, --version            バージョン情報を表示します。
         -p, --past               過去の短縮URLの履歴を5件表示します。
-		-g, --group <GROUP>      サービスのグループ名を指定します。デフォルトは "ouranos"です。
+	-g, --group <GROUP>      サービスのグループ名を指定します。デフォルトは "ouranos"です。
     	-d, --delete             指定された短縮URLを削除する。
     ARGUMENT
         URL                      短縮するURLを指定します。この引数は複数の値を受け付けます。
