@@ -23,8 +23,8 @@ URLとはインターネット上の所在を表記するものであり、イ�
         -g, --group <GROUP>      サービスのグループ名を指定します。デフォルトは "ouranos"です。
         -d, --delete             指定された短縮URLを削除する。
         
-## インストール方法 (まだ途中)
-    $ brew install ouranos ?
+## インストール方法 
+    $ brew install g1954327/tap/ouranos
     
 # このプロジェクトについて
     
