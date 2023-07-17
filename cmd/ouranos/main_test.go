@@ -24,6 +24,7 @@ func Example_Delete() {
 func Example_Completion() {
 	goMain([]string{"./ouranos", "--generate-completions"})
 	// Output:
+	// GenerateCompletion
 	// トークンが与えられていません
 }
 
